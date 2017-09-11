@@ -9,6 +9,8 @@ import android.os.RemoteException;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.example.remotecommlibrary.RemoteInterface;
+
 /**
  * Created by Admin on 9/9/2017.
  */
@@ -16,26 +18,22 @@ import android.util.Log;
 public class BoundService extends Service{
     public static final String TAG = "MyBoundServiceTag";
 
-    //IBinder iBinder = new ServerBinder();
-
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind: ");
-        return new RemoteInterface.Stub() {
+        return iBinder;
 
-            @Override
-            public int getPid() throws RemoteException {
-                Log.d(TAG, "getPid: ");
-                return Process.myPid();
-            }
-
-            public String stuff(){
-                Log.d(TAG, "stuff: ");
-                return "RandomData";
-            }
-        };
     }
+
+    private final RemoteInterface.Stub iBinder = new RemoteInterface.Stub() {
+        public int getPid(){
+            return Process.myPid();
+        }
+        public String stuff(){
+            return "RandomData";
+        }
+    };
 
     @Override
     public boolean onUnbind(Intent intent) {
@@ -48,11 +46,5 @@ public class BoundService extends Service{
         super.onCreate();
         Log.d(TAG, "onCreate: ");
 
-    }
-
-    public class ServerBinder extends Binder {
-        public BoundService getService(){
-            return BoundService.this;
-        }
     }
 }

@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/ServerCommuncation.iml" filepath="$PROJECT_DIR$/ServerCommuncation.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/remotecommlibrary/remotecommlibrary.iml" filepath="$PROJECT_DIR$/remotecommlibrary/remotecommlibrary.iml" />
       <module fileurl="file://$PROJECT_DIR$/serverclient/serverclient.iml" filepath="$PROJECT_DIR$/serverclient/serverclient.iml" />
     </modules>
   </component>

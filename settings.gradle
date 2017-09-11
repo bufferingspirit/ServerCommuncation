@@ -1,1 +1,1 @@
-include ':app', ':serverclient'
+include ':app', ':serverclient', ':remotecommlibrary'

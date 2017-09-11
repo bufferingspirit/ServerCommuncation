@@ -1,5 +1,5 @@
 // RemoteInterface.aidl
-package com.example.admin.servercommuncation;
+package com.example.remotecommlibrary;
 
 // Declare any non-default types here with import statements
 

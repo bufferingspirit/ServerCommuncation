@@ -7,16 +7,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.os.IBinder;
+import android.os.RemoteException;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+
+import com.example.remotecommlibrary.RemoteInterface;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String TAG = "MainActivity";
 
     Intent boundIntent;
-    BoundService boundService;
+    RemoteInterface boundService;
     boolean isBound = false;
 
     @Override
@@ -25,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         if(!isBound) {
             boundIntent = new Intent(this, BoundService.class);
+            Log.d(TAG, "onCreate: " + BoundService.class);
             bindService(boundIntent, serviceConnection, this.BIND_AUTO_CREATE);
         }
     }
@@ -39,8 +43,12 @@ public class MainActivity extends AppCompatActivity {
     ServiceConnection serviceConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            BoundService.ServerBinder myBinder  = (BoundService.ServerBinder) iBinder;
-            boundService = myBinder.getService();
+            boundService = RemoteInterface.Stub.asInterface(iBinder);
+            try {
+                Log.d(TAG, "onServiceConnected: " + boundService.stuff());
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            }
             isBound = true;
         }
 

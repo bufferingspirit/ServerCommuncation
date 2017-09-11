@@ -19,6 +19,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <service android:name=".BoundService">
+                 android:enabled="true"
+                 android:exported="true"
+            <intent-filter>
+                <action android:name="com.example.admin.service.ACTION_BIND" />
+            </intent-filter>
+        </service>
         <activity android:name=".ScanActivity"></activity>
     </application>
 

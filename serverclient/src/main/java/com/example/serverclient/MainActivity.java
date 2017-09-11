@@ -12,10 +12,12 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.remotecommlibrary.RemoteInterface;
+
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
 
-    com.example.serverclient.RemoteInterface myServer;
+    RemoteInterface myServer;
     RemoteServiceConnection connection;
 
 
@@ -24,19 +26,47 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initService();
+    }
+
+    /** Binds this activity to the service. */
+    private void initService() {
         connection = new RemoteServiceConnection();
+        Intent i = new Intent();
+
+        i.setAction("com.example.admin.service.ACTION_BIND");
+        i.setComponent(new ComponentName("com.example.admin.servercommuncation", "com.example.admin.servercommuncation.BoundService"));
+
+        boolean ret = bindService(i, connection, Context.BIND_AUTO_CREATE);
+        Log.d(TAG, "initService() bound with " + ret);
+    }
+
+    /** Unbinds this activity from the service. */
+    private void releaseService() {
+        unbindService(connection);
+        connection = null;
+        Log.d(TAG, "releaseService() unbound.");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        releaseService();
     }
 
     public void callServer(View view){
-            Log.d(TAG, "callServer: ");
+        try {
+            Log.d(TAG, "callServer: " + myServer.stuff());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     private class RemoteServiceConnection implements ServiceConnection {
 
-
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
-            myServer = com.example.serverclient.RemoteInterface.Stub.asInterface((IBinder) iBinder);
+            myServer = RemoteInterface.Stub.asInterface((IBinder) iBinder);
             Log.d(TAG, "onServiceConnected() connected");
             Toast.makeText(MainActivity.this, "Service connected", Toast.LENGTH_LONG)
                     .show();
